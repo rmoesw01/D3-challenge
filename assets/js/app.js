@@ -54,31 +54,54 @@ d3.csv("assets/data/data.csv").then(csvData => {
       .attr("transform", `translate(0, ${chartHeight})`)
       .call(bottomAxis);
 
+    // text label for the x axis
+    chartGroup.append("text")             
+    .attr("transform",
+          "translate(" + (chartWidth/2) + " ," + 
+                        (chartHeight + margin.top - 10) + ")")
+    .style("text-anchor", "middle")
+    .style("font-weight", "bold")
+    .text("In Poverty (%)");
+
     chartGroup.append("g")
       .call(leftAxis);
 
-    // append circles
-    var circlesGroup = chartGroup.selectAll("circle")
-      .data(csvData)
-      .enter()
-      .append("circle")
-      .attr("cx", d => xScale(d.poverty))
-      .attr("cy", d => yScale(d.healthcare))
-      .attr("r", "10")
-      .attr("fill", "lightblue")
-      .attr("stroke-width", "1")
-      .attr("stroke", "lightblue");
+      // text label for the y axis
+    chartGroup.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0 - margin.left)
+    .attr("x",0 - (chartHeight / 2))
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .style("font-weight", "bold")
+    .text("Lacks Healthcare (%)"); 
 
-    // append labels
-    var textGroup = chartGroup.selectAll("text")
+    var nodes = chartGroup.append("g")
+      .attr('class', 'nodes')
+      .selectAll('circle')
       .data(csvData)
       .enter()
-      .append("text")
-      .text(function(d) {return d.abbr;})
-      .attr("x", function(d) {return xScale(d.poverty-0.15);})
-      .attr("y", function(d) {return yScale(d.healthcare-0.35);})
-      .attr("font_family", "sans-serif")  // Font type
-      .attr("font-size", "11px")  // Font size
-      .attr("fill", "red");   // Font color
+      .append("g")
+      .attr('transform', d => {
+        d.x = xScale(d.poverty), 
+        d.y = yScale(d.healthcare);
+        return `translate(${d.x},${d.y})`;
+      })
+
+      nodes.append('circle')
+        .attr('class', 'node')
+        .attr("r", "10")
+        .attr("fill", "#4b97c9")
+        .attr("stroke-width", "1")
+        .attr("stroke", "#4b97c9")
+      
+      nodes.append('text')
+        .attr("x", 0)
+        .attr("dy", ".35em")
+        .attr('text-anchor', "middle")
+        .text(d => {return d.abbr;})
+        .attr("font_family", "sans-serif")  // Font type
+        .attr("font-size", "11px")  // Font size
+        .attr("fill", "white");   // Font color;
 })
 
