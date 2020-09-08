@@ -4,8 +4,8 @@
 ## Programming Languages
 * HTML - display platform
 * CSS - formatting for display format
-* JavaScript - allows for dynamic selection from multiple state samples
-* D3 - build and place individual elements of the chart dynamically
+* JavaScript - allows for dynamic display from multiple state data samples
+    * D3 - build and place individual elements of the chart dynamically
 
 ## Data
 * The data comes from a .csv file
