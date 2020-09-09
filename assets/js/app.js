@@ -10,6 +10,7 @@ var margin = {
   left: 100
 };
 
+// Initialize the x- & y-axis to display poverty vs. lacks healthcare as a default display
 var chosenXaxis = 'poverty';
 var chosenYaxis = 'healthcare';
 var xlabel = 'Poverty: '
@@ -19,46 +20,87 @@ var ylabel = 'Lacks Healthcare: '
 var chartWidth = svgWidth - margin.left - margin.right;
 var chartHeight = svgHeight - margin.top - margin.bottom;
 
+// Define a function that adjusts the scale of the x-axis based on the chosen x variable
 function xScale(data, xAxis) {
+  // Passed Parameters:
+  // data = the given data source
+  // xAxis = the newly chosen x variable
+
+  // create and return the new scale for the x-axis
   var xLinearScale = d3.scaleLinear()
     .range([0, chartWidth])
     .domain([d3.min(data, d => d[xAxis])*0.9, d3.max(data, d => d[xAxis])*1.1]);
   return xLinearScale;
 }
 
+// Define a function that adjusts the scale of the y-axis based on the chosen y variable
 function yScale(data, yAxis) {
-  // Configure a linear scale with a range between the chartHeight and 0
-  // Set the domain for the yScale function
+  // Passed Parameters:
+  // data = the given data source
+  // yAxis = the newly chosen y variable
+
+  // create and return the new scale for the y-axis
   var yLinearScale = d3.scaleLinear()
     .range([chartHeight, 0])
     .domain([d3.min(data, d => d[yAxis])*0.8, d3.max(data, d => d[yAxis])*1.1]);
   return yLinearScale;
 }
 
+// Define a function that moves the nodes (contains circles and state labels) to the new
+// positions based on chosen variables
 function renderNodes(newXscale, newYscale, nodes) {
+  // Passed Parameters:
+  // newXscale = the new scale for the x-axis
+  // newYscale = the new scale for the y-axis
+  // nodes = the originally defined nodes (these will be changed to the new nodes in this function)
+
+  // transition the nodes to their new positions based on chosen variables on the x- & y-axis
+  // chosenXaxis & chosenYaxis = global variables containing the user choice for the x- & y-axis
   nodes.transition()
     .duration(1000)
     .attr('transform', d => {
       d.x = newXscale(d[chosenXaxis]), 
       d.y = newYscale(d[chosenYaxis]);
       return `translate(${d.x},${d.y})`;
-    });    
+    });  
+  
+  // return the newly positioned nodes
   return nodes;
 }
 
+// Define a function to draw the new x-axis based on the user choosing a new variable for the axis
 function renderxAxis(newXscale, xAxis) {
+// Passed Parameters:
+// newXscale = the scale for the newly chosen variable on the x-axis
+// xAxis = the original x-axis (this will be changed by this function)
+
+  // create the new x-axis based on the newXscale
   var bottomAxis = d3.axisBottom(newXscale);
+
+  // transition the old x-axis to the new one dynamically
   xAxis.transition()
     .duration(1000)
     .call(bottomAxis);
+
+  // return the new x-axis
   return xAxis;
 }
 
+// Define a function to draw the new y-axis based on the user choosing a new variable for the axis
 function renderyAxis(newYscale, yAxis) {
+// Passed Parameters:
+// newYscale = the scale for the newly chosen variable on the y-axis
+// yAxis = the original y-axis (this will be changed by this function)
+
+  // create the new y-axis based on the newYscale
   var leftAxis = d3.axisLeft(newYscale);
+
+  // transition the old y-axis to the new one dynamically
   yAxis.transition()
     .duration(1000)
     .call(leftAxis);
+
+  // return the new y-axis  
   return yAxis;
 }
 
