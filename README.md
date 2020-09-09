@@ -25,4 +25,4 @@
 
     ![Advanced Scatter Chart](Images/advancedScatter.GIF)
 
-    ![Advanced Scatter Chart with Tool Tip](Images/advancedScatter_withTT.gif)
+    ![Advanced Scatter Chart with Tool Tip](Images/advancedScatter_withTT.GIF)
